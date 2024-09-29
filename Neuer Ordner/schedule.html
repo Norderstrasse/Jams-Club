@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbeitsplan</title>
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+<div class="container">
+  <h1>Arbeitsplan</h1>
+  <div>
+    <label for="month">Monat:</label>
+    <select id="month">
+      <!-- Monate von Januar bis Dezember -->
+      <option value="0">Januar</option>
+      <option value="1">Februar</option>
+      <option value="2">März</option>
+      <option value="3">April</option>
+      <option value="4">Mai</option>
+      <option value="5">Juni</option>
+      <option value="6">Juli</option>
+      <option value="7">August</option>
+      <option value="8">September</option>
+      <option value="9">Oktober</option>
+      <option value="10">November</option>
+      <option value="11">Dezember</option>
+    </select>
+    <label for="year">Jahr:</label>
+    <input type="number" id="year" value="2024" min="1900" max="2100">
+    <button onclick="generateCalendar()">Kalender anzeigen</button>
+  </div>
+  <div>
+    <h2>Wochentage anzeigen/verbergen</h2>
+    <label><input type="checkbox" onclick="toggleWeekday('Montag')" checked> Montag</label>
+    <label><input type="checkbox" onclick="toggleWeekday('Dienstag')" checked> Dienstag</label>
+    <label><input type="checkbox" onclick="toggleWeekday('Mittwoch')" checked> Mittwoch</label>
+    <label><input type="checkbox" onclick="toggleWeekday('Donnerstag')" checked> Donnerstag</label>
+    <label><input type="checkbox" onclick="toggleWeekday('Freitag')" checked> Freitag</label>
+    <label><input type="checkbox" onclick="toggleWeekday('Samstag')" checked> Samstag</label>
+    <label><input type="checkbox" onclick="toggleWeekday('Sonntag')" checked> Sonntag</label>
+  </div>
+  <div id="calendar"></div>
+</div>
+<script type="text/javascript" src="/js/script.js"></script>
+</body>
+</html>
