@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>User Info</title>
+  <script>
+    function fetchData() {
+      fetch('/fetchData/content')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('content').innerHTML = data;
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+</head>
+<body>
+<button onclick="fetchData()">Load User Info</button>
+<div id="content" th:fragment="content" th:utext="${htmlContent}"></div>
+</body>
+<!--<div th:utext="${htmlContent}"></div>-->
+</body>
+</html>

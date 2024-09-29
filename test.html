@@ -1,48 +1,107 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbeitsplan</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON to HTML Table</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>Arbeitsplan</h1>
-    <div>
-        <label for="month">Monat:</label>
-        <select id="month">
-            <!-- Monate von Januar bis Dezember -->
-            <option value="0">Januar</option>
-            <option value="1">Februar</option>
-            <option value="2">März</option>
-            <option value="3">April</option>
-            <option value="4">Mai</option>
-            <option value="5">Juni</option>
-            <option value="6">Juli</option>
-            <option value="7">August</option>
-            <option value="8">September</option>
-            <option value="9">Oktober</option>
-            <option value="10">November</option>
-            <option value="11">Dezember</option>
-        </select>
-        <label for="year">Jahr:</label>
-        <input type="number" id="year" value="2024" min="1900" max="2100">
-        <button onclick="generateCalendar()">Kalender anzeigen</button>
-        <div>
-            <label><input type="checkbox" class="weekday-checkbox" value="Montag" onclick="toggleWeekday('Montag')"> Montag</label>
-            <label><input type="checkbox" class="weekday-checkbox" value="Dienstag" onclick="toggleWeekday('Dienstag')"> Dienstag</label>
-            <label><input type="checkbox" class="weekday-checkbox" value="Mittwoch" onclick="toggleWeekday('Mittwoch')"> Mittwoch</label>
-            <label><input type="checkbox" class="weekday-checkbox" value="Donnerstag" onclick="toggleWeekday('Donnerstag')"> Donnerstag</label>
-            <label><input type="checkbox" class="weekday-checkbox" value="Freitag" onclick="toggleWeekday('Freitag')"> Freitag</label>
-            <label><input type="checkbox" class="weekday-checkbox" value="Samstag" onclick="toggleWeekday('Samstag')"> Samstag</label>
-            <label><input type="checkbox" class="weekday-checkbox" value="Sonntag" onclick="toggleWeekday('Sonntag')"> Sonntag</label>
-        </div>
+<h1>JSON Data in HTML Table</h1>
+<table id="jsonTable">
+  <thead>
+  <tr>
+    <th>User ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Age</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- JSON data will be inserted here -->
+  </tbody>
+</table>
+<form id="form" onsubmit="submitFormDbEntry(event)">
+  <fieldset>
+    <legend>Neuer Eintrag</legend>
+    <label for="FIRSTNAME">First name:</label><br>
+    <input type="text" id="FIRSTNAME" name="FIRSTNAME" required><br>
+    <label for="LASTNAME">LAST name:</label><br>
+    <input type="text" id="LASTNAME" name="LASTNAME" required><br>
+    <label for="AGE">Alter:</label><br>
+    <input type="number" id="AGE" name="AGE" required><br>
+    <input type="submit" value="Submit">
+  </fieldset>
+</form>
 
-        <button id="removeWeekdaysButton" onclick="removeSelectedWeekdays()">Ausgewählte Wochentage entfernen</button>
-    </div>
-    <div id="calendar"></div>
-</div>
-<script src="script.js"></script>
+<script>
+  function submitFormDbEntry(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const formData = {
+      firstName: document.getElementById('FIRSTNAME').value,
+      lastName: document.getElementById('LASTNAME').value,
+      age: document.getElementById('AGE').value,
+    };
+
+    fetch('customers/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+      console.log('Success:', data);
+      alert('User info submitted successfully!');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('There was a problem with your submission.');
+    });
+  }
+  // Funktion zum Erstellen der Tabelle
+  function createTableFromJSON(data) {
+    const tableBody = document.getElementById('jsonTable').getElementsByTagName('tbody')[0];
+
+    data.forEach(item => {
+      const row = document.createElement('tr');
+
+      Object.values(item).forEach(value => {
+        const cell = document.createElement('td');
+        cell.textContent = value;
+        row.appendChild(cell);
+      });
+
+      tableBody.appendChild(row);
+    });
+  }
+  //alles experimente
+  //
+  //bis hier
+  fetch('/customers')
+  .then(response => response.json())
+  .then(data => createTableFromJSON(data))
+  .catch(error => console.error('Error fetching JSON data:', error));
+</script>
 </body>
 </html>
