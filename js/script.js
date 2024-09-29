@@ -280,3 +280,29 @@ async function generateCalendarFirst() {
   selectedWeekdays.forEach(weekday => hideWeekday(weekday));
 
 }
+
+async function saveDataToServer(data) {
+  const response = await fetch('arn:aws:apigateway:eu-north-1::/apis/5cyawpj4lj/routes/l16u96f', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  if (response.ok) {
+    console.log('Daten erfolgreich gespeichert');
+  } else {
+    console.error('Fehler beim Speichern der Daten');
+  }
+}
+
+async function fetchData() {
+  const response = await fetch('arn:aws:apigateway:eu-north-1::/apis/5cyawpj4lj/routes/s8qtm1a');
+  const data = await response.json();
+  const container = document.getElementById('data-container');
+  data.forEach(item => {
+    const div = document.createElement('div');
+    div.textContent = `Tag: ${item.day}, Arbeiter: ${item.worker}, Position: ${item.position}, Uhrzeit: ${item.time}`;
+    container.appendChild(div);
+  });
+}
